@@ -12,10 +12,10 @@ private:
 
 	std::vector<AABB> f_Objects;
 
-	std::array<raylib::Vector3, 8> MakeMesh() const;
+	std::array<raylib::Vector3, 8> MakeMesh();
 
 	std::array<raylib::Vector3, 8> f_Mesh;
-	std::array<Plane, 6> planes;  // Array para almacenar los seis planos
+	std::array<Plane, 6> f_Planes;  // Array para almacenar los seis planos
 
 	raylib::Vector3 f_Origin;
 
@@ -37,6 +37,9 @@ private:
 	float f_FOD;
 	float f_FOV;
 	float f_Aspect;
+	float f_NearDistance;
+	float f_BackHeight;
+	float f_BackWidth;
 
 
 public:
@@ -48,11 +51,10 @@ public:
 	
 	void UpdatePlanes();  // Nueva función para actualizar planos
 
-	void Move(raylib::Vector3 NewPosition);
-
 	std::array<raylib::Vector3, 8> GetMesh() const;
 
 	void drawAABB(const AABB& aabb);
+
 	void DrawWireframe() const;
 
 	// Método para dibujar solo los objetos visibles dentro del frustum
@@ -60,5 +62,6 @@ public:
 
 	bool isAABBVisible( AABB& aabb) ;  // Método para frustum culling
 
+	void DrawPlaneNormals();
 
 };

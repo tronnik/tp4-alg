@@ -47,6 +47,8 @@ int main(void) {
 
     Frustum.DrawVisibleObjects();
 
+    Frustum.DrawPlaneNormals();
+
     DrawGrid(20,1);
 
     Camera.EndMode();
