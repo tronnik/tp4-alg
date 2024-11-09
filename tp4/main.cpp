@@ -35,6 +35,8 @@ int main(void) {
 
     Frustum.Update(Camera2);
 
+    Frustum.UpdatePlanes();
+
     Window.BeginDrawing();
 
     Window.ClearBackground(BLACK);
@@ -42,6 +44,8 @@ int main(void) {
     Camera.BeginMode();
 
     Frustum.DrawWireframe();
+
+    Frustum.DrawVisibleObjects();
 
     DrawGrid(20,1);
 
