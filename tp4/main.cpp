@@ -42,24 +42,24 @@ void DrawWireframe(const std::array<raylib::Vector3, 8>& Mesh,
 
 int main(void) {
   raylib::Window Window;
-  raylib::Camera Camera;
-  raylib::Camera Camera2;
+  raylib::Camera RealCam;
+  raylib::Camera FakeCam;
   Window.Init();
 
   // Define the camera to look into our 3d world
-  Camera.position = {10.0f, 10.0f, 10.0f};
-  Camera.target = {0.0f, 0.0f, 0.0f};
-  Camera.up = {0.0f, 1.0f, 0.0f};
-  Camera.fovy = 45.0f;
-  Camera.projection = CAMERA_PERSPECTIVE;
+  RealCam.position = {10.0f, 10.0f, 10.0f};
+  RealCam.target = {0.0f, 0.0f, 0.0f};
+  RealCam.up = {0.0f, 1.0f, 0.0f};
+  RealCam.fovy = 45.0f;
+  RealCam.projection = CAMERA_PERSPECTIVE;
 
-  Camera2.position = {10.0f, 10.0f, 10.0f};
-  Camera2.target = {0.0f, 0.0f, 0.0f};
-  Camera2.up = {0.0f, 1.0f, 0.0f};
-  Camera2.fovy = 45.0f;
-  Camera2.projection = CAMERA_PERSPECTIVE;
+  FakeCam.position = {10.0f, 10.0f, 10.0f};
+  FakeCam.target = {0.0f, 0.0f, 0.0f};
+  FakeCam.up = {0.0f, 1.0f, 0.0f};
+  FakeCam.fovy = 45.0f;
+  FakeCam.projection = CAMERA_PERSPECTIVE;
 
-  Frustum Frustum(20, Camera2);
+  Frustum Frustum(20, FakeCam);
 
   DisableCursor();
 
@@ -74,15 +74,15 @@ int main(void) {
 
   // Main game loop
   while (!WindowShouldClose()) {
-    Camera.Update(CAMERA_FREE);
+    RealCam.Update(CAMERA_FREE);
 
-    Frustum.Update(Camera2);
+    Frustum.Update(FakeCam);
 
     Frustum.UpdatePlanes();
 
     Window.BeginDrawing();
 
-    Camera.BeginMode();
+    RealCam.BeginMode();
 
     Window.ClearBackground(BLACK);
 
@@ -96,7 +96,7 @@ int main(void) {
 
     DrawGrid(20, 1);
 
-    Camera.EndMode();
+    RealCam.EndMode();
 
     Window.EndDrawing();
   }
