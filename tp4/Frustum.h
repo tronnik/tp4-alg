@@ -10,11 +10,10 @@ class Frustum {
 	static float f_CameraH;
 private:
 
-	std::vector<AABB> f_Objects;
-
 	std::array<raylib::Vector3, 8> MakeMesh();
 
 	std::array<raylib::Vector3, 8> f_Mesh;
+
 	std::array<Plane, 6> f_Planes;  // Array para almacenar los seis planos
 
 	raylib::Vector3 f_Origin;
@@ -45,23 +44,14 @@ private:
 public:
 	Frustum(float FOD, const raylib::Camera& Camera);
 
-	void AddObject(const AABB& object);
-
 	void Update(raylib::Camera Camera);
 	
 	void UpdatePlanes();  // Nueva función para actualizar planos
 
 	std::array<raylib::Vector3, 8> GetMesh() const;
 
-	void drawAABB(const AABB& aabb);
 
-	void DrawWireframe() const;
+	bool IsObjectVisible(std::array<raylib::Vector3, 8> ObjectMesh) const;  // Método para frustum culling
 
-	// Método para dibujar solo los objetos visibles dentro del frustum
-	void DrawVisibleObjects();
-
-	bool isAABBVisible( AABB& aabb) ;  // Método para frustum culling
-
-	void DrawPlaneNormals();
 
 };

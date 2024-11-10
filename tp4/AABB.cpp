@@ -1,58 +1,48 @@
 #include "AABB.h"
 
-AABB::AABB( Vector3& center,  Vector3& extents)
-    : center(center), extents(extents) {}
 
-bool AABB::isOnOrForwardPlane( Plane& plane) 
-{
-    float r = extents.x * fabs(plane.f_Normal.x) +
-        extents.y * fabs(plane.f_Normal.y) +
-        extents.z * fabs(plane.f_Normal.z);
 
-    float d = Vector3DotProduct(plane.f_Normal, center) + plane.f_Distance;
-
-    return d + r >= 0;
+AABB::AABB(const float* ObjectsVert, const int VertexCount, const raylib::Vector3 Origin) : f_Origin(Origin) {
+  MakeMesh(ObjectsVert, VertexCount);
 }
 
-//#include "AABB.h"
-//#include <limits>
-//
-//// Constructor vacío: inicializa los valores máximos y mínimos posibles para min y max
-//AABB::AABB()
-//    : min(raylib::Vector3(std::numeric_limits<float>::max())),
-//    max(raylib::Vector3(std::numeric_limits<float>::lowest())) {}
-//
-//// Constructor que recibe un conjunto de vértices y define el AABB
-//AABB::AABB(const std::vector<raylib::Vector3>& vertices) {
-//    for (const auto& vertex : vertices) {
-//        ExpandToFit(vertex);
-//    }
-//}
-//
-//// Expande el AABB para incluir un nuevo vértice
-//void AABB::ExpandToFit(const raylib::Vector3& point) {
-//    if (point.x < min.x) min.x = point.x;
-//    if (point.y < min.y) min.y = point.y;
-//    if (point.z < min.z) min.z = point.z;
-//
-//    if (point.x > max.x) max.x = point.x;
-//    if (point.y > max.y) max.y = point.y;
-//    if (point.z > max.z) max.z = point.z;
-//}
-//
-//// Calcula el centro del AABB
-//raylib::Vector3 AABB::GetCenter() const {
-//    return (min + max) * 0.5f;
-//}
-//
-//// Calcula las extensiones del AABB
-//raylib::Vector3 AABB::GetExtents() const {
-//    return (max - min) * 0.5f;
-//}
-//
-//// Verifica si un punto está dentro o en los bordes del AABB
-//bool AABB::Contains(const raylib::Vector3& point) const {
-//    return (point.x >= min.x && point.x <= max.x) &&
-//        (point.y >= min.y && point.y <= max.y) &&
-//        (point.z >= min.z && point.z <= max.z);
-//}
+
+
+std::array<raylib::Vector3, 8> AABB::GetMesh() {
+  return f_Mesh;
+}
+
+
+
+void AABB::MakeMesh(const float* ObjectsVert, int VertexCount) {
+
+  raylib::Vector3 Min = {ObjectsVert[0], ObjectsVert[1], ObjectsVert[2],};
+  raylib::Vector3 Max = {ObjectsVert[0], ObjectsVert[1], ObjectsVert[2],};
+
+  f_Mesh.fill({0, 0, 0});
+
+  for (int I = 1; I < VertexCount; I++) {
+    Min = Min.Min({
+        ObjectsVert[I * 3],
+        ObjectsVert[I * 3 + 1],
+        ObjectsVert[I * 3 + 2]});
+    Max = Max.Max({
+        ObjectsVert[I * 3],
+        ObjectsVert[I * 3 + 1],
+        ObjectsVert[I * 3 + 2]});
+  }
+
+  f_Mesh[4] = Min;
+  f_Mesh[2] = Max;
+
+  f_Mesh[0] = raylib::Vector3(Max.x, Min.y, Min.z);
+  f_Mesh[1] = raylib::Vector3(Max.x, Min.y, Max.z);
+  f_Mesh[3] = raylib::Vector3(Max.x, Max.x, Min.z);
+  f_Mesh[5] = raylib::Vector3(Min.x, Min.y, Max.z);
+  f_Mesh[6] = raylib::Vector3(Min.x, Max.y, Max.z);
+  f_Mesh[7] = raylib::Vector3(Min.x, Max.y, Min.z);
+
+  for(auto& Vertex: f_Mesh) {
+    Vertex = Vertex.Add(f_Origin);
+  }
+}

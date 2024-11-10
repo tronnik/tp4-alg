@@ -2,17 +2,22 @@
 
 #include <raymath.h>
 
-class Plane
-{
+
+
+class Plane {
 public:
-    Vector3 f_Normal;
-    Vector3 f_Center;
-    float f_Distance;
+  Plane();
 
-    Plane();
-    Plane(const Vector3& point, const Vector3& normal);
-    Vector3 GetNormal() const;
-    Vector3 GetCenter() const;
-    bool isOnOrForward( Vector3& point) ;
+  Plane(const Vector3& point, const Vector3& normal);
+
+  Vector3 GetNormal() const;
+
+  Vector3 GetCenter() const;
+
+  bool IsOnOrForward(const Vector3& Point) const;
+
+private:
+  Vector3 f_Normal;
+  Vector3 f_Center;
+  float f_D;
 };
-
